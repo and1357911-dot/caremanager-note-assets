@@ -60,5 +60,6 @@
     }
   ],
   "publication_approved": false,
-  "visual_qc": "NOT_CHECKED"
+  "visual_qc": "NOT_CHECKED",
+  "render_request": "2026-11-01 OSN-022 six-image initial generation; assets only; visual review pending"
 }
