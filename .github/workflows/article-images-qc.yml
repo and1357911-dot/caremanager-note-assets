@@ -11,6 +11,7 @@ on:
       - 'OSN-*/*.png'
       - 'scripts/check_article_images.py'
       - '.github/workflows/article-images-qc.yml'
+      - 'scripts/build_contact_sheet.py'
 permissions:
   contents: read
 jobs:
@@ -32,6 +33,17 @@ jobs:
         with:
           name: osn-022-png-integrity-report
           path: osn-022-image-qc.json
+          if-no-files-found: warn
+      - name: Prepare six-slide visual review sheet
+        run: |
+          python3 -m pip install --user Pillow==11.3.0
+          python3 scripts/build_contact_sheet.py OSN-022-20261101
+      - name: Upload contact sheet for visual review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: osn-022-six-slide-visual-preview
+          path: qc-previews/OSN-022-20261101-contact-sheet.jpg
           if-no-files-found: warn
       - name: Check specified article on manual run
         if: github.event_name == 'workflow_dispatch'
