@@ -1,0 +1,35 @@
+name: Article Images QC - Read Only
+on:
+  workflow_dispatch:
+    inputs:
+      article_id:
+        description: Article ID (OSN-NNN-YYYYMMDD)
+        required: true
+        type: string
+  push:
+    paths:
+      - 'OSN-*/*.png'
+      - 'scripts/check_article_images.py'
+      - '.github/workflows/article-images-qc.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile image validator
+        run: python3 -m py_compile scripts/check_article_images.py
+      - name: Check specified article on manual run
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          ARTICLE_ID: ${{ inputs.article_id }}
+        run: python3 scripts/check_article_images.py "$ARTICLE_ID"
+      - name: Check all existing article folders on push
+        if: github.event_name == 'push'
+        run: |
+          for dir in OSN-*; do
+            [ -d "$dir" ] || continue
+            python3 scripts/check_article_images.py "$dir"
+          done
