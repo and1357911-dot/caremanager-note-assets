@@ -1,0 +1,36 @@
+{
+  "article_id": "OSN-022-20261101",
+  "png_integrity": "PASS",
+  "japanese_text_fit": "PASS",
+  "image_count": 6,
+  "visual_qc": "NOT_CHECKED",
+  "publication_approved": false,
+  "buffer_draft_approved": false,
+  "e2e_4_platforms": "NOT_DONE",
+  "images": [
+    {
+      "file": "instagram_01.png",
+      "sha256": "a6b6669a4ec12df1ebea4b5f11e0fa4b474acaebe7cf721899ecb1f743178b1a"
+    },
+    {
+      "file": "instagram_02.png",
+      "sha256": "59fc4b07c2d60e316efb3a8f08e6a715a43bd52fdb3032cfb35289a7df2b4d6d"
+    },
+    {
+      "file": "instagram_03.png",
+      "sha256": "8bc15d57af7c8e795de96d51908a7998b9e78e7e9459637d00a119ed09e7cbc8"
+    },
+    {
+      "file": "instagram_04.png",
+      "sha256": "2109633e4cd61d10f67b14e2d2cc2407fc62b206f5a80df82169338901a63744"
+    },
+    {
+      "file": "instagram_05.png",
+      "sha256": "b66a5e6196ae232003495b0bac497cfd230534c8be1ad9a2ac4a11457b94e55c"
+    },
+    {
+      "file": "instagram_06.png",
+      "sha256": "ff35cc60b99366a82d4820adc1edba4eb14bf3f9285401068f06f842eed6b252"
+    }
+  ]
+}\n

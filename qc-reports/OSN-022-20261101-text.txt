@@ -1,0 +1,1 @@
+PASS: six-slide Japanese text fits designated regions; human visual review still required
