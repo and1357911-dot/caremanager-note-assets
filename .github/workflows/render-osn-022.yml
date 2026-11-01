@@ -1,6 +1,9 @@
 name: Render OSN-022 Article Images (Assets Only)
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'specs/OSN-022-20261101.json'
 permissions:
   contents: write
 concurrency:
