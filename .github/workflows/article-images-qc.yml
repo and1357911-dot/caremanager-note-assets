@@ -22,7 +22,10 @@ jobs:
       - name: Compile image validator
         run: python3 -m py_compile scripts/check_article_images.py
       - name: Run six-file PNG integrity check for OSN-022
-        run: python3 scripts/check_article_images.py OSN-022-20261101 | tee osn-022-image-qc.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/check_article_images.py OSN-022-20261101 | tee osn-022-image-qc.json
       - name: Upload downloadable PNG integrity report
         if: always()
         uses: actions/upload-artifact@v4
