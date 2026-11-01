@@ -3,7 +3,7 @@
   "png_integrity": "PASS",
   "japanese_text_fit": "PASS",
   "image_count": 6,
-  "visual_qc": "NOT_CHECKED",
+  "visual_qc": "PASS",
   "publication_approved": false,
   "buffer_draft_approved": false,
   "e2e_4_platforms": "NOT_DONE",
@@ -32,5 +32,7 @@
       "file": "instagram_06.png",
       "sha256": "ff35cc60b99366a82d4820adc1edba4eb14bf3f9285401068f06f842eed6b252"
     }
-  ]
+  ],
+  "visual_review_method": "Six-slide contact sheet fetched as base64 from GitHub and visually inspected in ChatGPT on 2026-11-01",
+  "visual_review_findings": "All six slides legible; no visible text clipping or apparent typographical errors; consistent layout."
 }
