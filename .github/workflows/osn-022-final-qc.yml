@@ -1,0 +1,60 @@
+name: OSN-022 Final Asset QC Evidence (No Publishing)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'requests/OSN-022-20261101.final-qc'
+permissions:
+  contents: write
+concurrency:
+  group: osn-022-final-qc-evidence
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install Pillow and Japanese fonts in virtual environment
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+          python3 -m venv /tmp/osn022-venv
+          /tmp/osn022-venv/bin/pip install Pillow==11.3.0
+      - name: Run strict checks and save verifiable evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qc-reports qc-previews
+          python3 scripts/check_article_images.py OSN-022-20261101 > qc-reports/OSN-022-20261101-png.json
+          /tmp/osn022-venv/bin/python scripts/check_text_fit.py OSN-022-20261101 > qc-reports/OSN-022-20261101-text.txt
+          /tmp/osn022-venv/bin/python scripts/build_contact_sheet.py OSN-022-20261101
+          test -s qc-previews/OSN-022-20261101-contact-sheet.jpg
+          python3 - <<'PY'
+          import json,pathlib
+          root=pathlib.Path('qc-reports')
+          data=json.loads((root/'OSN-022-20261101-png.json').read_text())
+          assert data['png_check']=='PASS' and len(data['images'])==6
+          assert (root/'OSN-022-20261101-text.txt').read_text().startswith('PASS:')
+          receipt={'article_id':'OSN-022-20261101','png_integrity':'PASS','japanese_text_fit':'PASS','image_count':6,'visual_qc':'NOT_CHECKED','publication_approved':False,'buffer_draft_approved':False,'e2e_4_platforms':'NOT_DONE','images':data['images']}
+          (root/'OSN-022-20261101-final-qc.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\\n')
+          PY
+      - name: Upload preview and evidence even if commit fails
+        uses: actions/upload-artifact@v4
+        with:
+          name: OSN-022-QC-evidence-and-contact-sheet
+          path: |
+            qc-reports/OSN-022-20261101-*
+            qc-previews/OSN-022-20261101-contact-sheet.jpg
+      - name: Commit only first-time QC evidence and preview
+        run: |
+          set -euo pipefail
+          test ! -e qc-reports/OSN-022-20261101-final-qc.json.lock
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add qc-reports/OSN-022-20261101-png.json qc-reports/OSN-022-20261101-text.txt qc-reports/OSN-022-20261101-final-qc.json qc-previews/OSN-022-20261101-contact-sheet.jpg
+          git diff --cached --quiet && exit 0
+          git commit -m "Store OSN-022 verified asset QC and visual preview (no publishing)"
+          git push origin HEAD:main
