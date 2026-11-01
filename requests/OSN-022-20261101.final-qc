@@ -2,3 +2,4 @@ article_id=OSN-022-20261101
 purpose=asset-integrity-and-contact-sheet-only
 publication_approved=false
 buffer_draft_approved=false
+retry_after_valid_json_fix=true
