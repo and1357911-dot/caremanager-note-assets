@@ -24,7 +24,12 @@ def render(article):
     if not pathlib.Path(FONT).is_file():
         raise ValueError("Required Japanese font unavailable")
     folder = ROOT/article
-    folder.mkdir(exist_ok=True)
+    # Never replace previously created or published article assets.
+    # mkdir without exist_ok also protects against an existing empty directory.
+    try:
+        folder.mkdir()
+    except FileExistsError as exc:
+        raise ValueError("Article asset directory already exists; refusing to overwrite") from exc
     for index, slide in enumerate(slides,1):
         kicker,title,body,footer = (slide.get(k) for k in ("kicker","title","body","footer"))
         if not all(isinstance(x,str) and 0<len(x)<=110 for x in (kicker,title,footer)):
